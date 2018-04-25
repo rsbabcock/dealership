@@ -1120,7 +1120,7 @@ const ledger = sales.reduce((ledger, sale) => {
 // 1. Which salesperson sold the most cars?
 const reps = sales.reduce((l, s) => {
     const key = `${s.sales_agent.first_name} ${s.sales_agent.last_name}`
-
+    
     if (!l.has(key)) {
         l.set(key, {sales:1, profit: s.gross_profit})
     } else {
@@ -1129,7 +1129,7 @@ const reps = sales.reduce((l, s) => {
     }
     return l
 }, new Map())
-// reps
+reps
 
 const repSalesArray = [...reps.entries()]
 // repSalesArray
@@ -1181,3 +1181,40 @@ const repSalesArray = [...reps.entries()]
 
 // // 1. Which bank provided the most loans to our customers?
 
+const banks = sales.reduce((l, s) => {
+    const key = s.credit.credit_provider
+    
+    if (!l.has(key)) {
+        l.set(key, {loans:1, credit: s.gross_profit})
+        // l
+    } 
+    else {
+        let current = l.get(key)
+        // current
+        l.set(key, { loans: current.loans+1, credit: current.credit + s.gross_profit})
+        // profit: current.profit + s.gross_profit
+    }
+    return l
+   
+}, new Map())
+
+const banksArray = [...banks.entries()]
+console.log(banksArray)
+
+
+const sortedBanks = banksArray.sort((a, b) => b[1].credit - a[1].credit)
+// console.log(sortedBanks)
+
+const topBank = sortedBanks.shift()
+topBank
+
+const modelOutput = `The top credit producer was ${topBank[0]}, who had ${topBank[1].loans} loans, and approved $${topBank[1].credit} of credit`
+modelOutput
+
+// const sortedModels = modelArray.sort((c, p) => p[1].profit - c[1].profit)
+// const topModel = sortedModels.shift()
+// const modelOutput = `
+// We sold ${topModel[1].sales} ${topModel[0]} cars
+// for ${topModel[1].profit.toLocaleString("en-us",  { style: "currency", currency: "USD" })}
+// in 2017`
+// modelOutput
